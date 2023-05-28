@@ -21,6 +21,7 @@ def html_code(url: str) -> BeautifulSoup:
 
 
 def parsing_auto(html: BeautifulSoup) -> list:
+    """Парсинг страницы с автомобилями"""
     cars = html.find_all('div', class_='boxCatalog2')
     # Собираем информацию для каждого автомобиля
     car_info_list: list = []
@@ -56,7 +57,7 @@ def parsing_auto(html: BeautifulSoup) -> list:
 
 def get_info_car(html):
     """
-    Получение всей информации о автомобиле
+    Получение всей информации об автомобиле
     """
     title_object = html.find('div', class_='titleObject')
     name = title_object.contents[0].strip()
@@ -111,6 +112,7 @@ def save_photo_car(url_list: list[str]):
 
 
 def main():
+    """Главная функция"""
     # result = create_data_db(parsing_auto(url=url))
     # if result:
     #     print("Данные успешно получены")
@@ -125,4 +127,5 @@ def main():
 
 
 if __name__ == '__main__':
+    """Запуск скрипта"""
     main()

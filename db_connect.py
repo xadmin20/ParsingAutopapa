@@ -7,7 +7,7 @@ db_client = pymongo.MongoClient(config.site_db)
 
 
 def create_data_db(data_list: Union[dict]) -> bool:
-    """ Создаем в БД записи из парсинга"""
+    """Создает БД"""
     try:
         current_db = db_client["autopapa"]
         collection = current_db["autopapa"]
@@ -22,7 +22,7 @@ def create_data_db(data_list: Union[dict]) -> bool:
 
 
 def car_link() -> list:
-    """ Формирует список из ссылок """
+    """Возвращает список ссылок на автомобили"""
     link: list = []
     try:
         current_db = db_client["autopapa"]
@@ -36,3 +36,31 @@ def car_link() -> list:
     return link
 
 
+def test_double_delete() -> None:
+    """Удаляет дубликаты из БД"""
+    current_db = db_client["autopapa"]
+    collection = current_db["autopapa"]
+    docs = list(collection.find())
+    unique_docs: list = []
+
+    for doc in docs:
+        if doc['id'] not in unique_docs:
+            print(f"Добавлен уникальный документ {doc['id']}")
+            unique_docs.append(doc['id'])
+        else:
+            collection.delete_one({'id': doc['id']})
+            print(f"Удален дубликат {doc['id']}")
+    print(f"Удалено {len(docs) - len(unique_docs)} дубликатов")
+
+
+def test_openai():
+    """Тестовая функция"""
+    test_double_delete()
+    current_db = db_client["autopapa"]
+    collection = current_db["autopapa"]
+    docs = collection.find({'id': '772984'})
+    for doc in docs:
+        print(doc)
+
+
+test_openai()
